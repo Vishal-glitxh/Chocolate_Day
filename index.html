@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chocolate Day 🍫</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Comic Sans MS","Poppins",cursive;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(135deg,#fff1c1,#fbc2eb,#f6d365);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* FACTORY CARD */
+.factory{
+  width:92%;
+  max-width:420px;
+  background:#fff;
+  border-radius:28px;
+  padding:25px;
+  text-align:center;
+  border:4px solid #d2691e;
+  box-shadow:0 14px 0 #a0522d;
+  animation:pop 0.6s ease;
+  position:relative;
+  z-index:2;
+}
+
+@keyframes pop{
+  from{transform:scale(0.8);}
+  to{transform:scale(1);}
+}
+
+.hidden{display:none;}
+
+h1{
+  color:#8b4513;
+  margin-bottom:10px;
+}
+
+p{
+  color:#a0522d;
+  font-size:1.05em;
+  margin-bottom:15px;
+  min-height:60px;
+}
+
+/* OPTIONS */
+.options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+}
+
+.option{
+  padding:12px 18px;
+  border-radius:30px;
+  background:#d2691e;
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 5px 0 #8b4513;
+  user-select:none;
+}
+
+.option:active{
+  transform:translateY(4px);
+  box-shadow:0 1px 0 #8b4513;
+}
+
+/* CHOCOLATE DISPLAY */
+.chocoBox{
+  font-size:60px;
+  margin:15px 0;
+  animation:bounce 1.5s infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+
+/* FLOATING SWEETS (FIXED) */
+.float{
+  position:absolute;
+  font-size:22px;
+  animation:floatUp linear infinite;
+  opacity:0.9;
+  pointer-events:none; /* ✅ IMPORTANT FIX */
+  z-index:1;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(100vh);}
+  to{transform:translateY(-10vh);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- SCREEN 1 -->
+<div class="factory" id="s1">
+  <h1>🍫 Happy Chocolate Day</h1>
+  <p>
+    Welcome to my little chocolate factory 🏭  
+    Let’s make something sweet… together 💕
+  </p>
+  <div class="option" id="startBtn">Start 🍩</div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="factory hidden" id="s2">
+  <h1>Choose your chocolate 🍫</h1>
+  <p id="msg1">Pick the base</p>
+  <div class="options">
+    <div class="option" data-base="Dark 🍫">Dark</div>
+    <div class="option" data-base="Milk 🍫">Milk</div>
+    <div class="option" data-base="White 🍫">White</div>
+  </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="factory hidden" id="s3">
+  <h1>Add a filling 🧁</h1>
+  <p id="msg2">What’s inside matters 💖</p>
+  <div class="options">
+    <div class="option" data-fill="Caramel">Caramel</div>
+    <div class="option" data-fill="Strawberry">Strawberry</div>
+    <div class="option" data-fill="Nuts">Nuts</div>
+  </div>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="factory hidden" id="s4">
+  <h1>Final touch ✨</h1>
+  <p id="msg3">Almost ready…</p>
+  <div class="options">
+    <div class="option" data-top="❤️">Heart</div>
+    <div class="option" data-top="🍬">Candy</div>
+    <div class="option" data-top="✨">Sparkle</div>
+  </div>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="factory hidden" id="s5">
+  <h1>Your Chocolate 💝</h1>
+  <div class="chocoBox" id="finalChoco">🍫</div>
+  <p>
+    This chocolate isn’t perfect…  
+    but it’s warm, sweet, and made just for you 💕  
+    Just like my feelings 🍫
+  </p>
+</div>
+
+<script>
+/* =====================
+   DOM REFERENCES
+===================== */
+const screens = {
+  s1: document.getElementById("s1"),
+  s2: document.getElementById("s2"),
+  s3: document.getElementById("s3"),
+  s4: document.getElementById("s4"),
+  s5: document.getElementById("s5")
+};
+
+const startBtn = document.getElementById("startBtn");
+const msg1 = document.getElementById("msg1");
+const msg2 = document.getElementById("msg2");
+const finalChoco = document.getElementById("finalChoco");
+
+/* SCREEN SWITCHER */
+function show(id){
+  Object.values(screens).forEach(s => s.classList.add("hidden"));
+  screens[id].classList.remove("hidden");
+}
+
+/* START */
+startBtn.addEventListener("click", () => show("s2"));
+
+/* BASE SELECT */
+document.querySelectorAll("[data-base]").forEach(btn=>{
+  btn.addEventListener("click", () => {
+    msg1.innerText = "Good choice! Comfort matters 🍫";
+    setTimeout(()=>show("s3"),600);
+  });
+});
+
+/* FILLING SELECT */
+document.querySelectorAll("[data-fill]").forEach(btn=>{
+  btn.addEventListener("click", () => {
+    msg2.innerText = "Sweet inside, always 💖";
+    setTimeout(()=>show("s4"),600);
+  });
+});
+
+/* TOPPING SELECT */
+document.querySelectorAll("[data-top]").forEach(btn=>{
+  btn.addEventListener("click", () => {
+    finalChoco.innerText = "🍫" + btn.dataset.top;
+    show("s5");
+  });
+});
+
+/* FLOATING SWEETS */
+const sweets = ["🍫","🍪","🍩","🧁","✨"];
+for(let i=0;i<20;i++){
+  const f=document.createElement("div");
+  f.className="float";
+  f.innerText=sweets[Math.floor(Math.random()*sweets.length)];
+  f.style.left=Math.random()*100+"vw";
+  f.style.animationDuration=6+Math.random()*6+"s";
+  document.body.appendChild(f);
+}
+</script>
+
+</body>
+</html>
